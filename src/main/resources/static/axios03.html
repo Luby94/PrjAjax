@@ -6,19 +6,53 @@
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
+  <fieldset>
+    <legend>버스정류장정보</legend>
+    <label>한 페이지당 줄수</label>
+    <input type="text" id="numOfRows" value="10" /><br>
+    <label>페이지 번호</label>
+    <input type="text" id="pageNo" value="1" /><br>
+    <label>정류소 명</label>
+    <input type="text" id="bstopnm" value="부산시청" /><br>
+    <label>정류소 번호</label>
+    <input type="text" id="arsno" value="13708" /><br>
+  </fieldset>
   <button>Ok</button>
   <div id="output"></div>
+  <button onclick="btnClick()">Ok</button>
+  <a href="http://localhost:8080/GetBus?numOfRows=10&pageNo=1&bstopnm=&arsno=">go</a>
   
   <script>
+  
+    function btnClick() {
+    	location.href = "http://localhost:8080/GetBus?numOfRows=10&pageNo=1&bstopnm=&arsno="
+    }
   
     function xmlToHTML(xmlObj) {
     
     	let bstopid = xmlObj.querySelector('bstopid').innerHTML;
     	let bstopnm = xmlObj.querySelector('bstopnm').innerHTML;
-    	let arsno = xmlObj.querySelector('arsno').innerHTML;
+    	
+    	//let arsno = xmlObj.querySelector('arsno')	// arsno 코드가 없는 데이터가 있어서 html 불러올때 에러발생
+    	let arsnoEl = xmlObj.querySelector('arsno')	// 있는 없든 찾아라
+    	let arsno = ''								// arsno 초기값은 null 이다
+    	if(arsnoEl != null)							// arsnoEl 이 null 이 아니면
+    		arsno = arsnoEl.innerHTML;				// arsno 는 arsnoEl.innerHTML 이다
+    												// arsnoEl = null 이면 arsno = null(초기값)
+    	
     	let gpsx = xmlObj.querySelector('gpsx').innerHTML;
     	let gpsy = xmlObj.querySelector('gpsy').innerHTML;
     	let stoptype = xmlObj.querySelector('stoptype').innerHTML;
+    	let html = `<ul>
+    	  <li>정류소아이디 : ${bstopid}</li>
+    	  <li>정류소명 : ${bstopnm}</li>
+    	  <li>정류소번호 : ${arsno}</li>
+    	  <li>GPS X : ${gpsx}</li>
+    	  <li>GPS Y : ${gpsy}</li>
+    	  <li>정류소구분 : ${stoptype}</li>
+    	</ul>`
+    	
+    	return html;
     	
     }
   
@@ -27,23 +61,56 @@
     // CORS 에러가 발생 한다(보안상의 이유로 그렇게 만듦)
     // /GetBus Controller(java)로 data 서버의 data 를 가져오고
     // /GetBus 를 자바스크립트가 가져오는 방식
-    const btnOkEl = document.querySelector('button')
+    const btnOkEl = document.querySelector('button');
     btnOkEl.addEventListener('click', () => {
-    	axios.get('/GetBus')
+    	
+    	let numOfRows = document.querySelector('#numOfRows').value;
+    	let pageNo = document.querySelector('#pageNo').value;
+    	let bstopnm = document.querySelector('#bstopnm').value;
+    	let arsno = document.querySelector('#arsno').value;
+
+    	// Parameter Key 값 : 변수
+    	let params = {
+    			numOfRows : numOfRows,
+    			pageNo : pageNo,
+    			bstopnm : bstopnm,
+    			arsno : arsno
+    	};
+    	
+    	// node.js axios 라이브러리 호출
+    	// 페이지를 변경하지 않고 서버의 데이터를 가져올 수 있다 : ajax
+    	// 1. XHR (XMLHttpRequest) 객체, 2. $.ajax(), 3. axios, 4. fetch
+    	axios.post( '/GetBus', new URLSearchParams(params) )
+    	//axios.post( 'https://localhost:8080/GetBus', new URLSearchParams(params) )
     	     .then((response) => {
     	    	 console.log(response);
     	    	 console.log(response.data);
-    	    	 let xml = response.data;
+    	    	 let xml = response.data;	// 문자열
     	    	 //①alert(xml);
     	    	 //②alert(typeof xml);	// string
     	    	 //②xml <- string
     	    	 //③xml 문자열을 xml 객체(= document 객체)로 변환하는 작업
     	    	 //③let xmlObj = new DOMParser().parseFromString(xml, "text/xml");
     	    	 //③alert(typeof xmlObj);	// Object
-    	    	 let xmlObj = new DOMParser().parseFromString(xml, "text/xml");	// ③
-    	    	 //④console.dir(xmlObj);
-    	    	 let html = xmlToHTML(xmlObj)	// ⑤
-    	    	 const outputEl = document.querySelector('#output)')	// ⑤
+    	    	 let xmlObj = new DOMParser().parseFromString(xml, "text/xml");	// ③, xml string(문자열) 을 xml 객체(document 객체)로 바꿔주는 함수
+    	    	 //④console.log(xmlObj);	// xml 객체(document)
+    	    	 
+    	    	 console.log(xmlObj);	// ⑥item 이 배열임
+    	    	 let items = xmlObj.querySelectorAll('body > items > item');	// ⑥
+    	    	 // 일반 자바스크립트 객체일 경우
+    	    	 /* items.forEach( (item, index) => {
+    	    		 console.log(item);
+    	    	 } ) */
+    	    	 
+    	    	 // tag 배열일 경우 위 방법 안먹힘, tag 배열일 경우
+    	    	 let html = '';
+    	    	 Array.from(items).forEach( (item, index) => {	// ⑦
+    	    		 console.log(item);
+    	    	 	 html += xmlToHTML(item)	// ⑤ → ⑦
+    	    	 } )
+    	    	 
+    	    	 
+    	    	 const outputEl = document.querySelector('#output')	// ⑤
     	    	 outputEl.innerHTML = html;		// ⑤
     	    	 
     	    	 //④let bstopnm = xmlObj.getElementsByTagName("bstopnm")[0];
