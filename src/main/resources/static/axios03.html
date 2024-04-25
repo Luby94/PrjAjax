@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+  <button>Ok</button>
+  <div id="output"></div>
+  
+  <script>
+  
+    function xmlToHTML(xmlObj) {
+    
+    	let bstopid = xmlObj.querySelector('bstopid').innerHTML;
+    	let bstopnm = xmlObj.querySelector('bstopnm').innerHTML;
+    	let arsno = xmlObj.querySelector('arsno').innerHTML;
+    	let gpsx = xmlObj.querySelector('gpsx').innerHTML;
+    	let gpsy = xmlObj.querySelector('gpsy').innerHTML;
+    	let stoptype = xmlObj.querySelector('stoptype').innerHTML;
+    	
+    }
+  
+  
+    // 자바스크립트에서 주소가 다른 서버의 data 를 요청하면
+    // CORS 에러가 발생 한다(보안상의 이유로 그렇게 만듦)
+    // /GetBus Controller(java)로 data 서버의 data 를 가져오고
+    // /GetBus 를 자바스크립트가 가져오는 방식
+    const btnOkEl = document.querySelector('button')
+    btnOkEl.addEventListener('click', () => {
+    	axios.get('/GetBus')
+    	     .then((response) => {
+    	    	 console.log(response);
+    	    	 console.log(response.data);
+    	    	 let xml = response.data;
+    	    	 //①alert(xml);
+    	    	 //②alert(typeof xml);	// string
+    	    	 //②xml <- string
+    	    	 //③xml 문자열을 xml 객체(= document 객체)로 변환하는 작업
+    	    	 //③let xmlObj = new DOMParser().parseFromString(xml, "text/xml");
+    	    	 //③alert(typeof xmlObj);	// Object
+    	    	 let xmlObj = new DOMParser().parseFromString(xml, "text/xml");	// ③
+    	    	 //④console.dir(xmlObj);
+    	    	 let html = xmlToHTML(xmlObj)	// ⑤
+    	    	 const outputEl = document.querySelector('#output)')	// ⑤
+    	    	 outputEl.innerHTML = html;		// ⑤
+    	    	 
+    	    	 //④let bstopnm = xmlObj.getElementsByTagName("bstopnm")[0];
+    	    	 //④console.dir(bstopnm);
+    	    	 //④console.dir(bstopnm.innerHTML);
+    	    	 
+    	     })
+    	     .catch((error) => {
+    	    	 console.log(error);
+    	    	 alert(error);
+    	     })
+    })
+  
+  </script>
+  
+</body>
+</html>

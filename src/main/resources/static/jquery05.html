@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://code.jquery.com/jquery.min.js"></script>
+<script>
+  // data
+  let student = {
+		  num : 13,
+		  name : '민경',
+		  age : 22,
+		  toString : function() {
+			  //let txt = `번호:${this.num}, 이름:${this.name}, 나이:${this.age}`
+			  let txt  = '번호:' + this.num;
+			      txt += '이름:' + this.name;
+			      txt += '나이:' + this.age;
+				  return txt;
+		  }
+  }
+  
+  $( function() {                                                
+	console.dir(student)
+	$('button').on('click', function() {
+		//let txt = student.toString();
+		//$('#output').html( txt );
+		let obj = JSON.stringify( student );	// Javascript 객체 -> 문자열로 바꾸어줌
+		let obj2 = {"num":14,"name":"민경2","age":20};
+		let obj3 = '{"num":14,"name":"민경2","age":20}';	// string
+		let obj4 = JSON.parse(obj3);					// string -> object
+		let a;	// 변수 초기값이 없으면 undefined
+		//$('#output').html( obj );
+		//$('#output').html( obj2.num );
+		$('#output').append( 'a ==== ' + a + '<br>'); 				// undefined
+		$('#output').append( 'obj ==== ' + obj + '<br>');				// {"num":13,"name":"민경","age":22} 
+		$('#output').append( 'obj.num ==== ' + obj.num + '<br>' );		// undefined
+		$('#output').append( 'obj2.num ==== ' + obj2.num + '<br>' );		// 13
+		$('#output').append( 'obj3.num ==== ' + obj3.num + '<br>' );		// undefined
+		$('#output').append( 'typeof(obj) ==== ' + typeof(obj) + '<br>' );	// string : '{"num":13,"name":"민경","age":22}'
+		$('#output').append( 'typeof(obj2) ==== ' + typeof(obj2) + '<br>' );	// object : {"num":13,"name":"민경","age":22}
+		$('#output').append( 'typeof(obj3) ==== ' + typeof(obj3) + '<br>' );	// string
+		$('#output').append( 'obj4.name ==== ' + obj4.name + '<br>' );
+		$('#output').append( 'typeof(obj4) ==== ' + typeof(obj4) + '<br>' );	// object
+		// + '<br>' : html 에서 줄바꿀때 사용
+		//--------------------------------------------------
+		let s = JSON.stringify(student);
+		$('#output').append( 's ==== ' + s + '<br>' );	// {"num":13,"name":"민경","age":22}
+		$('#output').append( 's.num ==== ' + s.num + '<br>' );	// undefined
+		// JSON : 1. 함수가 사라짐 2. 모든 속성에 "" 가 붙는다
+	})
+  })
+</script>
+</head>
+<body>
+  <button>출력</button>
+  <div id="output"></div>
+</body>
+</html>

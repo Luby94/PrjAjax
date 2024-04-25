@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style>
+  ul {
+  	list-style: none;  /* li 에 • 없앰 */
+  	padding: 10px;
+  	width: 300px;
+  	margin: 20px;
+  	border: 1px solid #333;
+  	border-radius: 10px;
+  	float: left;
+  }
+  
+  #output2 ul {
+  	width: 800px;
+  }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+  <button>Album List</button>
+  <div id="output"></div>
+  <hr>
+  <!-- <button> ◀ </button> -->
+  <button id="btnPrev"> &lt; </button>
+  <input type="number" id="num" value="1" min="1" max="5000" size="3" />
+  <!-- <button> ▶ </button> -->
+  <button id="btnNext"> &gt; </button>
+  <div id="output2"></div>
+  
+  <script>
+  /*
+	{ albumId: 1,
+	  id: 1,
+	  title: 'accusamus beatae ad facilis cum similique qui sunt',
+	  url: 'https://via.placeholder.com/600/92c952',
+	  thumbnailUrl: 'https://via.placeholder.com/150/92c952' }
+  */
+  
+  function jsontohtml( data ) {
+	  let tag = `
+		  <ul>
+		    <li>${data.albumId}</li>
+		    <li>${data.id}</li>
+		    <li>${data.title}</li>
+		    <li>${data.url}</li>
+		    <li><img src="${data.thumbnailUrl}"></li>
+		  </ul>
+		 `
+	  return tag;
+  }
+  
+  
+  // Album List
+  const btnEls = document.querySelectorAll('button')	// querySelector : 결과가 하나일 때, button tag -> 배열
+  btnEls[0].addEventListener('click', () => {
+	  let url = 'https://jsonplaceholder.typicode.com/photos'
+	  axios.get(url)
+	       .then( (response) => {
+	    	   console.log(response);
+	    	   let dataList = response.data;
+	    	   console.log(dataList);
+
+	    	   /*
+	    	   dataList.forEach( (data) => {
+	    		   let html = jsontohtml( data )
+	    	   	   const outputEl = document.querySelector('#output');
+	    	       outputEl.innerHTML = html;
+	    	   } );
+	    	   */
+	    	   
+	    	   let html = '';
+	    	   dataList.forEach( (data) => {
+	    		   html += jsontohtml( data )
+	    	   } );
+	    	   const outputEl = document.querySelector('#output');
+	    	   outputEl.innerHTML = html;
+	       } )
+	       .catch( (error) => {
+	    	   console.log(error)
+	       } )
+  })
+  
+  // Album
+  const btnPrevEl = document.querySelector('#btnPrev');
+  const btnNextEl = document.querySelector('#btnNext');
+  const numEl = document.querySelector('#num');
+  const output2El = document.querySelector('#output2');
+  
+  numEl.addEventListener('change', () => {
+	  console.log(numEl.value)
+	  let url = 'https://jsonplaceholder.typicode.com/photos/' + numEl.value
+	  axios.get(url)
+	       .then( (resp) => {
+	    	   let data  = resp.data;
+	    	   let html  = "<fieldset>";
+      			   html += "<legend>Album</legend>";
+	    		   html += jsontohtml( data );
+    			   html += "</fieldset>";
+	    	   //output2El.innerHTML += html;		// 이렇게 해줘야 feildset 밑에 들어감
+	    	   output2El.innerHTML = html;
+	       } )
+  })
+  
+  btnPrevEl.addEventListener('click', () => {
+	  let num = parseInt(numEl.value);
+	  num = num - 1;
+	  if(num < 1) num = 1;
+	  numEl.value = num;
+	  numEl.dispatchEvent(new Event('change'))
+  });
+  
+  btnNextEl.addEventListener('click', () => {
+	  let num = parseInt(numEl.value);
+	  num = num + 1;
+	  if(num > 5000) num = 5000;
+	  numEl.value = num;
+	  numEl.dispatchEvent(new Event('change'))
+  });
+  
+  </script>
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+

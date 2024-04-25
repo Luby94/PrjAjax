@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://code.jquery.com/jquery.min.js"></script>
+<script>
+  $( function() {
+	/*
+	$('tr:odd').css('background', '#9F9F9F')	// odd : 홀수
+	$('tr:even').css('background', '#F9F9F9')	// even : 짝수
+	$('tr:first').css('background', '#000')
+	             .css('color', 'white')	// #FFF
+	             
+	$('td:nth-child(3n+1)').css('background', 'orange')
+	$('td:nth-child(3n+2)').css('background', 'blue')
+	$('td:nth-child(3n)').css('background', 'cyan')
+	*/
+	$('tr').eq(0).css({
+		//'background-color' : '#000',
+		backgroundColor : '#000',
+		color           : '#FFF'
+	});
+	// JSON : Javascript Object Notation
+	// javascript object(객체)를 data 로 표현하는 방법
+	// javascript 함수는 포함되지 않는다
+	
+  })
+</script>
+</head>
+<body>
+  <table>
+    <tr><td>이름</td><td>혈액형</td><td>지역</td><td>전화</td></tr>
+    <tr><td>강호동</td><td>AB형</td><td>강동구</td><td>010</td></tr>
+    <tr><td>서장훈</td><td>B형</td><td>강서구</td><td>011</td></tr>
+    <tr><td>박세리</td><td>A형</td><td>강남구</td><td>016</td></tr>
+    <tr><td>김연아</td><td>AB형</td><td>강북구</td><td>017</td></tr>
+    <tr><td>허재</td><td>o형</td><td>해운대구</td><td>018</td></tr>
+  </table>
+</body>
+</html>

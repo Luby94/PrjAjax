@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style>
+  /*
+  h1 { color: blue; }
+  p { color: red; }
+  */
+</style>
+
+<script>
+/*
+  window.onload = function() {	// 이 함수 걸면 script 가 body 쪽에 없어도 됨
+  // const h1El = document.getElementById('h1');	// Id 가 아님
+    const h1Els = document.getElementsByTagName('h1');	// 하나의 TagName 으로 여러 Elements 들을 얻음
+    console.log(h1Els)
+    h1Els[0].style.color = 'blue';
+    h1Els[1].style.color = 'blue';
+  
+    const pEls = document.getElementsByTagName('p');	// 하나의 TagName 으로 여러 Elements 들을 얻음
+    console.log(pEls)
+    for( let i = 0; i < pEls.length; i++ ) {
+      pEls[i].style.color = 'red';
+    }
+  }
+*/
+</script>
+
+<!-- jquery cdn (준비작업) -->
+<script src="https://code.jquery.com/jquery.min.js"></script>
+<script>
+  // jquery : js library 추가 필요 -> jquery : 원래 ${} 함수  
+  $(document).ready( function() {	// window.onload 역할 (한번만 가능)
+	  $( 'h1' ).css( 'color', 'blue' );
+	  $( 'p' ).css( 'color', 'red' );
+  } );
+  // $('h1') : h1 tag 를 찾아라 = document.getElementsByTagName('h1')
+  // .css()  : 그 안에 style sheet 를 () 안과 같이 주어라
+  $( function() {	// window.onload 와 달리 여러번 사용 가능
+	  $('#div1').html('<p>div1 입니다</p>')	// innerHTML : <b>글자</b> 굵게 표시            : div tag 안 p tag
+	  $('#div2').text('<p>div2 입니다</p>')	// innerText : <b>글자</b> &lt;(<) &gt;(>) 형태 : div tag 안 문자열
+	  $('div > p').css('text-decoration', 'underline');
+	  //$('input').val()	// <input type="" value="">
+	  //$('input').attr("type")	// <input type="" value="">
+	  //$('input').prop("type")
+	  
+	  // 이벤트 연결
+	  // js => arrow function 화살표 함수 -> 람다식 표현
+	  //①$('#div1').on('click', function() {
+	  $('div').on('click', function(e) {	// div tag 를 클릭할 때 'on' event( function(e) ) 연결
+		  //①console.log( $(this) )
+		  // e : 발생한 이벤트
+		  // e.target : 이벤트 발생시킨 Element
+		  console.log( e.target )
+		  //① 선택한(클릭한) div tag만(= #div1) 배경색을 녹색으로 변경
+		  //①$('#div1').css('background-color', 'green');
+		  $('div').css('background-color', 'green');
+		  //①alert('div1');
+		  // 선택한 div 만 녹색으로 변경하게 하려는데 p 가 껴잇어서 뭐시기 어쩃든 jquery02 로 이동
+		  $(this).off('click');
+	  })
+  });
+</script>
+
+</head>
+<body>
+
+  <h1>Hello</h1>
+  <p>Lorem Ipsum</p>
+  <h1>Title</h1>
+  <p>Lorem Ipsum</p>
+  <p>Lorem Ipsum</p>
+  
+  <div id="div1"></div>
+  <div id="div2"></div>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style>
+  table, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+  }
+  table {
+    width: 80%;
+    margin: 0 auto;
+  }
+  td {  
+    padding: 10px;
+  }
+  #output {
+    margin-top: 50px;
+  }
+</style>
+<script src="https://code.jquery.com/jquery.min.js"></script>
+<script>
+  // 객체 생성자 함수 : class 문법 이전에 사용했음
+  // 자바스크립트의 생성자와 객체를 동시에 만들어주는 문법
+  function Student(num, name, kor, eng, mat) {
+	  this.num  = num;
+	  this.name = name;
+	  this.kor  = kor;
+	  this.eng  = eng;
+	  this.mat  = mat;
+	  this.getTot    = function() {
+		  let kor = parseInt(this.kor);	// parseInt 해주지 않으면 점수가 String 으로 인식되어 합산시 100100100 이 됨
+		  let eng = parseInt(this.eng);
+		  let mat = parseInt(this.mat);
+		  return kor + eng + mat;
+	  };
+	  this.getAvg    = function() {
+		  // 소수 이하 3자리로 출력
+		  return (this.getTot() / 3).toFixed(3);
+	  };
+	  this.toTr      = function() {
+		  let tr = "<tr>";
+		  tr    += "<td>" + this.num + "</td>";
+		  tr    += "<td>" + this.name + "</td>";
+		  tr    += "<td>" + this.kor + "</td>";
+		  tr    += "<td>" + this.eng + "</td>";
+		  tr    += "<td>" + this.mat + "</td>";
+		  tr    += "<td>" + this.getTot() + "</td>";
+		  tr    += "<td>" + this.getAvg() + "</td>";
+		  tr    += "</tr>";
+		  return tr;
+	  };
+  }
+  
+  // 성적객체 배열 생성
+  let students = [];	// 배열 생성
+  
+  // 출력 함수
+  function header() {
+	  let head = '';
+	  head    += '<tr>';
+	  head    += '<td>번호</td>';
+	  head    += '<td>이름</td>';
+	  head    += '<td>국어</td>';
+	  head    += '<td>영어</td>';
+	  head    += '<td>수학</td>';
+	  head    += '<td>총점</td>';
+	  head    += '<td>평균</td>';
+	  head    += '</tr>';
+	  return head;
+  }
+  function display( students ) {
+	  let html = '<table>';
+	  html    += header();
+	  
+	  for( let student of students ) {
+		  html += student.toTr();
+	  }
+	  
+	  html    += '</table>';
+	  $('#output').html( html );
+  }
+  
+  // 이벤트 핸들러 : 이벤트와 연결된 함수
+  $( function() {
+	$('button').on('click', function() {	// 버튼 클릭 시 실행되는 함수 = event 와 연결된 함수 = event handler
+		let num  = $('#num').val();
+		let name = $('#name').val();
+		let kor  = $('#kor').val();
+		let eng  = $('#eng').val();
+		let mat  = $('#mat').val();
+		students.push( new Student(num, name, kor, eng, mat) )		// push() : 배열에 값을 넣는(저장하는) 행위
+		
+		// 결과 출력
+		display( students );
+		$('tr:first').css({
+			backgroundColor : 'black',
+			color : 'white',
+		})
+		$('tr:first > td').css({
+			border : '1px solid white'
+		})
+	})
+  })
+  
+</script>
+</head>
+<body>
+  <fieldset>
+    <legend>성적처리</legend>
+    번호: <input type="text" id="num" /><br>
+    이름: <input type="text" id="name" /><br>
+    국어: <input type="number" id="kor" min="0" max="100" value="100" /><br>
+    영어: <input type="number" id="eng" min="0" max="100" value="100" /><br>
+    수학: <input type="number" id="mat" min="0" max="100" value="100" /><br>
+    <button>Save</button>
+  </fieldset>
+  <div id="output"></div>
+</body>
+</html>

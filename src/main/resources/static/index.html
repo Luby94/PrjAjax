@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+  <div>
+    <ul>
+     <li><a href="/mvc">MVC 방식</a></li>
+     <li><a href="/ajax1">Ajax01(view)</a></li>
+     <li><a href="/ajax2">Ajax02(data)</a></li>
+     <li>&nbsp;</li>
+     <li>
+       <input type="text"   id="indata" />
+       <input type="button" id="btnGetData" value="중복확인(XHR)" />
+     </li>
+     <li>
+       <input type="text"   id="indata2" />
+       <input type="button" id="btnGetData2" value="중복확인(fetch)" />
+     </li>
+     <li>
+       <input type="text"   id="indata3" />
+       <input type="button" id="btnGetData3" value="중복확인(fetch)" />
+     </li>
+    </ul> 
+    <div id="output"></div>    
+  
+    <ul>
+      <li><a href="jquery01.html">jquery01</a></li>
+      <li><a href="jquery02.html">jquery02</a></li>
+      <li><a href="jquery03.html">jquery03</a></li>
+      <li><a href="jquery04.html">jquery04</a></li>
+      <li><a href="jquery05.html">jquery05</a></li>
+      <li><a href="jquery06.html">jquery06</a></li>
+      <li><a href="jquery07.html">jquery07</a></li>
+      <li>&nbsp;</li>
+      <li><a href="axios01.html">axios01</a></li>
+      <li><a href="axios01_2.html">axios01_2</a></li>
+      <li><a href="axios02.html">axios02</a></li>
+      <li><a href="axios03.html">axios03</a></li>
+    </ul>
+    
+  </div>
+  
+  <script>
+    const  outputEl = document.getElementById('output');
+    // a tag 사용하지 않고 버튼클릭할때 서버data 를 가져온다
+    const  btnGetDataEl = document.querySelector("#btnGetData")
+    btnGetDataEl.addEventListener('click', function(e) {
+        //alert('click');   
+        // old문법 : XMLHttpRequest
+        // response.ResponseText : response.text() in fetch
+        // response.ResponseXML  : response.xml() in fetch
+        // JSON : JSON.stringify( js 객체 ) -> string 변경
+        // JSON : JSON.parse("")            -> JS 객체 변경
+        const xhttp = new XMLHttpRequest(); // 1번 실행 : xhr new        
+        xhttp.onload = function() { 
+            // 비동기 호출(asynchronous javascript and xml 호출)
+        	// 4번째 실행 결과가 도착할때 수행하는 이벤트
+            console.dir(xhttp)
+			//alert( xhttp.responseText );
+           
+            outputEl.innerHTML = xhttp.responseText;
+        }
+        xhttp.open("GET", "/ajax3"); // 2번실행 호출준비
+        xhttp.send(); // 3번실행 : 호출 
+     } );	// addEventListener() 함수 끝
+    
+     //---------------------------------------------   
+     
+     const btnGetData2El   = document.querySelector('#btnGetData2');
+     btnGetData2El.onclick = (e) => {
+        // alert('data2 click');
+        let result = '';
+        fetch( '/ajax3' )
+         .then( (response) => response.text() )	// text/plain, text/html
+         .then( (data)     => { 
+               result =  data 
+               outputEl.innerHTML = result;
+         })
+     }; 
+     
+     //--------------------------------------------- 
+     
+     const btnGetData3El = document.querySelector('#btnGetData3');
+     btnGetData3El.onclick = () => {
+    	 
+    	 fetch('/ajax4')
+    	 	.then( ( response ) => response.json() )
+    	 	/* .then( ( response) => response.text() )
+    	 	   .then( ( text ) => alert(text) ); */
+    	 	// .then( ( text ) => {
+    	 	.then( ( jsonObj ) => {
+    	 			// alert(text)
+    	 			alert(jsonObj)
+    	 			// outputEl.innerHTML = text;
+    	 			// outputEl.innerHTML = json;	// [object Object]
+    	 			
+    	 			let html = `<div>
+    	 				  			<ul>
+    	 			    				<li>아이디:${jsonObj.userid}</li>
+    	 			    				<li>암호:${jsonObj.userpass}</li>
+    	 			    				<li>이름:${jsonObj.username}</li>
+    	 			  				</ul>
+    	 						</div>`
+    	 						
+    	 			// outputEl.innerHTML = json.username;	// 카리나	
+    	 			outputEl.innerHTML = html;
+    	 	}
+    	 ); 
+    	 
+     }
+     
+     
+  </script> 
+  
+</body>
+</html>
+
+
+
+
+
+

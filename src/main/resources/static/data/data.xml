@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<response>
+	<header>
+		<resultCode>00</resultCode>
+		<resultMsg>NORMAL SERVICE</resultMsg>
+	</header>
+	<body>
+		<items>
+			<item>
+				<bstopid>505780000</bstopid>
+				<bstopnm>부산시청</bstopnm>
+				<arsno>13708</arsno>
+				<gpsx>129.07691415917</gpsx>
+				<gpsy>35.179937855685</gpsy>
+				<stoptype>일반</stoptype>
+			</item>
+		</items>
+		<numOfRows>10</numOfRows>
+		<pageNo>1</pageNo>
+		<totalCount>1</totalCount>
+	</body>
+</response>

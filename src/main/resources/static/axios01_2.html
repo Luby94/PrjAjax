@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style>
+  ul {
+  	list-style: none;  /* li 에 • 없앰 */
+  	border: 1px solid #333;
+  	padding: 10px;
+  	margin: 20px;
+  	float: left;
+  	border-radius: 10px;
+  }
+  li img {
+  	width: 90px;
+  	height: 100px;
+  }
+  
+</style>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+  <button>Ok</button>
+  <div id="output"></div>
+  <script>
+    const btnOkEl = document.querySelector('button')
+    btnOkEl.addEventListener('click', function( e ) {
+    	
+    	console.dir(axios);
+
+    	//let url = 'https://jsonplaceholder.typicode.com/photos'
+    	axios.get( 'https://jsonplaceholder.typicode.com/photos' )
+    	     .then(function( response ) {
+    	    	 console.log( response )
+    	    	     	    	 
+    	    	 let albumId      = response.albumId;
+    	    	 let id           = response.id;
+    	    	 let title        = response.title;
+    	    	 let url          = response.url;
+    	    	 let thumbnailUrl = response.thumbnailUrl;
+    	    	 let dataList     = response.data;
+    	    	 
+    	    	 alert( title );
+    	    	 
+    	    	 const outputEl = document.querySelector('#output');
+    	    	 let html  = 'albumId: '      + dataList[1].albumId + '<br>'
+    	    	 html     += 'id: '           + dataList[1].id + '<br>'
+    	    	 html     += 'title: '        + dataList[1].title + '<br>'
+    	    	 html     += 'url: '          + dataList[1].url + '<br>'
+    	    	 html     += 'thumbnailUrl: ' + dataList[1].thumbnailUrl + '<hr>'
+    	    	 
+    	    	 html     += jsontohtml( dataList );
+    	    	 
+    	    	 outputEl.innerHTML = html;
+    	     })
+    	     .catch(function( error ) {
+    	    	 console.log( error )
+    	     })
+    		 .finally(function() {
+    			 console.log( "항상 실행" )
+    		 })
+    		 
+    })
+    
+    function jsontohtml( dataList ) {
+    	
+    	let tag = '';
+    	dataList.forEach( (data, i) => {
+    		if(i < 50) {
+    		tag += `<ul>
+    		    	  <li>albumId: ${data.albumId}</li>
+    		    	  <li>id: ${data.id}</li>
+    		    	  <li>title: ${data.title}</li>
+    		    	  <li>url: ${data.url}</li>
+    		    	  <li>
+    		    	  <img src="${data.thumbnailUrl}" alt="" />
+    		    	  </li>
+    		  		</ul>`
+    		}
+    	})
+    	return tag;
+    	
+    }
+    
+    
+  </script>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://code.jquery.com/jquery.min.js"></script>
+<script>
+  // 객체 배열 : List<PortalVo> portalList
+  let arr = [
+	  {name:'Naver'    , link: 'http://www.naver.com'},
+	  {name:'Nate'     , link: 'http://www.nate.com'},
+	  {name:'Daum'     , link: 'http://www.daum.net'},
+	  {name:'Google'   , link: 'http://www.google.com'},
+	  {name:'Microsoft', link: 'http://www.microsoft.com'},
+  ]
+
+  $( function() {
+	let msg = '';
+	
+	// js 반복문
+	arr.forEach( function( item, index ) {
+	  msg += `<li>`
+	  msg += `<a href="${item.link}">`
+	  msg += `${item.name}`
+	  msg += `</a>`
+	  msg += `</li>`
+	} );
+	$('ul:first').html(msg);
+	
+	// jquery 반복문
+	msg = '';	// msg 이미 만들었기에 또 만들수없음(= let 사용 X), 초기화만
+	$.each(arr, function( index, item ) {
+		msg += `<li>`
+		msg += `<a href="${item.link}">`
+		msg += `${item.name}`
+		msg += `</a>`
+		msg += `</li>`
+	})
+	$('ul').eq(1).html(msg);
+	
+	//-------------------------------------
+	msg = '<select name="" id="">';
+	for(let item of arr) {	// let item in arr
+		msg += `<option value="${item.link}">`
+		msg += `${item.name}`
+		msg += `</option>`
+	}
+	msg += "</select>"
+	$('div').eq(0).append(msg);
+	
+	// 이동구현 : button 을 찾아서 (id="btnGo")
+	$('#btnGo').click( function() {
+		let link = $('select > option:selected').val();
+		location.href = `${ link }`;
+	})
+
+	//-------------------------------------	
+	msg = '<ul>';
+	for(let i=0; i < arr.length; i++) {
+		msg += `<li>`
+		msg += `<a href="${arr[i].link}">`
+		msg += `${arr[i].name}`
+		msg += `</a>`
+		msg += `</li>`
+	}
+	msg += "</ul>"
+	$('div').eq(1).append(msg);
+	
+  })
+</script>
+</head>
+<body>
+  <ul></ul>
+  <ul></ul>
+  <div></div><button id="btnGo">이동</button>
+  <div></div>
+</body>
+</html>

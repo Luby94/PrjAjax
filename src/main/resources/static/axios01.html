@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style>
+  ul {
+  	list-style: none;  /* li 에 • 없앰 */
+  	border: 1px solid #333;
+  	padding: 10px;
+  	margin: 20px;
+  	float: left;
+  	border-radius: 10px;
+  }
+  li img {
+  	width: 90px;
+  	height: 100px;
+  }
+  
+</style>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+  <button>Ok</button>
+  <div id="output"></div>
+  <script>
+    const btnOkEl = document.querySelector('button')
+    btnOkEl.addEventListener('click', function( e ) {
+    	console.dir(axios);
+    	//alert('ok')
+    	let url = 'https://reqres.in/api/users?page=2'
+    	axios.get( url )
+    	     .then(function( response ) {
+    	    	 //console.log( response )	// <- response : 객체 안의 data 부분을 의미 = { data }
+    	    	 // axios 는 서버 결과물({}) 에 항목(객체)을 추가한다
+    	    	 // 실제 도착한 data 는 response 가 아니라 response.data 안에 존재한다.
+    	    	 console.log( response.data )
+    	    	 
+    	    	 // 서버가 보내준 자료 : response.data
+    	    	 /* { page: 2,
+    	    		  per_page: 6,	// per : ~당, 페이지 당 6개, 2개 페이지 총 12개 데이터
+    	    	 	  total: 12,
+    	    	      data: [ {id": 7, "email": ....},
+    	    	    	      {id": 8, "email": ....},
+    	    	    	      {id": 9, "email": ....},
+    	    	    	      {id": 10, "email": ....},
+    	    	    	      {id": 11, "email": ....},
+    	    	    	      {id": 12, "email": ....}
+    	    	      ] }
+    	    	  // 위의 {} 안이 전부 response.data, 그 안에 data 항목(= response.data.data)도 있음
+    	    	  // javascript 에서 [] : 배열, {} : 객체
+    	    	  // 즉 data(= response.data.data) 는 객체들의 배열
+    	    	  }
+    	    	 */
+    	    	 
+    	    	 let total    = response.data.total;
+    	    	 let page     = response.data.page;
+    	    	 let dataList = response.data.data;	// 배열
+    	    	 
+    	    	 alert( total );
+    	    	 const outputEl = document.querySelector('#output');
+    	    	 let html  = '총 페이지수: ' + total + '<br>'
+    	    	 html     += '현재 페이지: ' + page + '<hr>'
+    	    	 
+    	    	 html     += jsontohtml( dataList );
+    	    	 
+    	    	 outputEl.innerHTML = html;
+    	     })
+    	     .catch(function( error ) {
+    	    	 console.log( error )
+    	     })
+    		 .finally(function() {
+    			 console.log( "항상 실행" )	// 항상 실행되는 영역
+    		 })
+    		 
+    })
+    
+    function jsontohtml( dataList ) {
+    	/*
+    	1번 방법
+    	for(let i=0; i < dataList.length; i++) {
+    		let data = dataList[i]
+    		data.id
+    	}
+		2번 방법
+    	for(let i in dataList) {
+    		let data = dataList[i]
+    		data.id
+    	}
+		3번 방법
+		for(let data of dataList) {
+    		data.id
+    	}
+		4번 방법
+		dataList.forEach( function( data, i ) {
+			data.id
+		} );
+    	*/
+    	
+    	let tag = '';
+    	dataList.forEach( (data, i) => {
+    		tag += `<ul>
+    		    	  <li>id: ${data.id}</li>
+    		    	  <li>email: ${data.email}</li>
+    		    	  <li>first_name: ${data.first_name}</li>
+    		    	  <li>last_name: ${data.last_name}</li>
+    		    	  <li>
+    		    	  <img src="${data.avatar}" alt="" />
+    		    	  </li>
+    		  		</ul>`
+    	})
+    	return tag;
+    	
+    }
+    
+    
+  </script>
+</body>
+</html>
